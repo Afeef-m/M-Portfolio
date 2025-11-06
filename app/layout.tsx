@@ -1,7 +1,6 @@
 import React from "react";
 import "./globals.css";
 import Navbar from "./components/navbar/page";
-import MainHome from "./components/home/page";
 
 export default function RootLayout({
   children,
@@ -13,7 +12,6 @@ export default function RootLayout({
       <body >
         <Navbar/>
         {children}
-        <MainHome/>
       </body>
     </html>
   );
