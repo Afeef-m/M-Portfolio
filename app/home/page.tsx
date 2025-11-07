@@ -19,7 +19,8 @@ export default function MainHome() {
       ease: "power2.out",
     });
 
-    const message = ["Welcome to my portfolio", "I’m a Frontend Developer"];
+    const message = ["Welcome to my portfolio",
+       "I’m a Frontend Developer"];
     const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
 
     message.forEach((msg) => {
