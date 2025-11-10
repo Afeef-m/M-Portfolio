@@ -62,14 +62,16 @@
 import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
 import Image from "next/image";
-import robotImg from "@/public/robot.png"; // <-- rename your image as 'robot.png' and place it in /public
+import dynamic from "next/dynamic";
+import robotImg from "@/public/robot.png";
+
+const RobotScene = dynamic(() => import("../ThreeBackground"), { ssr: false });
 
 export default function RobotLoading({ onFinish }: { onFinish?: () => void }) {
   const robotRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // 🪶 Floating up & down motion
     gsap.to(robotRef.current, {
       y: -20,
       duration: 1.6,
@@ -78,7 +80,6 @@ export default function RobotLoading({ onFinish }: { onFinish?: () => void }) {
       ease: "power1.inOut",
     });
 
-    // 🌀 Gentle rotation for realism
     gsap.to(robotRef.current, {
       rotate: 3,
       duration: 2.5,
@@ -87,7 +88,6 @@ export default function RobotLoading({ onFinish }: { onFinish?: () => void }) {
       ease: "sine.inOut",
     });
 
-    // 🌟 Pulsing glow behind the robot
     gsap.to(glowRef.current, {
       scale: 1.2,
       opacity: 0.7,
@@ -97,27 +97,28 @@ export default function RobotLoading({ onFinish }: { onFinish?: () => void }) {
       ease: "power1.inOut",
     });
 
-    // ⏱ Optional fade-out (like your previous loader)
     const timer = setTimeout(() => {
       gsap.to(".loader-wrapper", {
         opacity: 0,
         duration: 0.8,
         onComplete: onFinish,
       });
-    }, 5000);
+    }, 5500);
 
     return () => clearTimeout(timer);
   }, [onFinish]);
 
   return (
-    <section className="loader-wrapper fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white overflow-hidden z-50">
-      {/* Glowing aura */}
+    <section className="loader-wrapper fixed inset-0 flex flex-col items-center justify-center text-white overflow-hidden z-50">
+      <div className="absolute inset-0 -z-10">
+        <RobotScene />
+      </div>
+
       <div
         ref={glowRef}
         className="absolute w-72 h-72 rounded-full bg-gradient-to-tr from-indigo-600 via-purple-500 to-cyan-400 blur-3xl opacity-60"
       ></div>
 
-      {/* Robot Image */}
       <div ref={robotRef} className="relative w-40 h-40">
         <Image
           src={robotImg}
@@ -127,7 +128,6 @@ export default function RobotLoading({ onFinish }: { onFinish?: () => void }) {
         />
       </div>
 
-      {/* Text */}
       <h2 className="mt-8 text-lg font-medium text-indigo-400 tracking-widest animate-pulse">
         Loading...
       </h2>
