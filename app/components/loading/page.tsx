@@ -1,123 +1,136 @@
+
+// "use client";
+// import React, { useEffect, useRef } from "react";
+// import gsap from "gsap";
+
+// export default function FuturisticLoader({ onFinish }: { onFinish?: () => void }) {
+//   const barRef = useRef<HTMLDivElement>(null);
+//   const dotRef = useRef<HTMLDivElement>(null);
+
+//   useEffect(() => {
+//     const tl = gsap.timeline({ repeat: -1, yoyo: true });
+//     tl.to(barRef.current, {
+//       width: "80%",
+//       duration: 1.2,
+//       ease: "power2.inOut",
+//     }).to(barRef.current, {
+//       width: "40%",
+//       duration: 1,
+//       ease: "power2.inOut",
+//     });
+
+//     gsap.to(dotRef.current, {
+//       x: 200,
+//       repeat: -1,
+//       duration: 1.2,
+//       yoyo: true,
+//       ease: "power1.inOut",
+//     });
+
+//     const timer = setTimeout(() => {
+//       gsap.to(".loader-wrapper", {
+//         opacity: 0,
+//         duration: 0.8,
+//         onComplete: onFinish,
+//       });
+//     }, 5000); 
+
+//     return () => clearTimeout(timer);
+//   }, [onFinish]);
+
+//   return (
+//     <section className="loader-wrapper fixed inset-0 flex flex-col items-center justify-center bg-black text-white overflow-hidden z-50">
+//       <div className="relative w-72 h-2 bg-neutral-900 rounded-full overflow-hidden">
+//         <div
+//           ref={barRef}
+//           className="absolute left-0 top-0 h-full bg-gradient-to-r from-purple-600 via-indigo-500 to-fuchsia-500 rounded-full blur-sm"
+//         />
+//         <div
+//           ref={dotRef}
+//           className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-purple-500 rounded-full shadow-[0_0_15px_#a855f7]"
+//         />
+//       </div>
+//       <h2 className="mt-6 text-lg tracking-wider text-purple-400 font-medium">
+//         Loading...
+//       </h2>
+//     </section>
+//   );
+// }
+
+
 "use client";
 import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
+import Image from "next/image";
+import robotImg from "@/public/robot.png"; // <-- rename your image as 'robot.png' and place it in /public
 
-export default function Loading({ onFinish }: { onFinish: () => void }) {
-  const refLoad = useRef<HTMLHeadingElement>(null);
-  const refCircle = useRef<HTMLDivElement>(null);
-  const refBox = useRef<HTMLDivElement>(null);
+export default function RobotLoading({ onFinish }: { onFinish?: () => void }) {
+  const robotRef = useRef<HTMLDivElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const messages = [
-      "Welcome to my portfolio",
-      "I'm a Frontend Developer",
-      "I create modern web apps",
-    ];
-
-    const tl = gsap.timeline({
-      onComplete: () => {
-        gsap.to([refLoad.current, refCircle.current, refBox.current], {
-          opacity: 0,
-          duration: 0.6,
-          ease: "power2.inOut",
-          onComplete: onFinish,
-        });
-      },
+    // 🪶 Floating up & down motion
+    gsap.to(robotRef.current, {
+      y: -20,
+      duration: 1.6,
+      repeat: -1,
+      yoyo: true,
+      ease: "power1.inOut",
     });
 
-    messages.forEach((msg) => {
-      tl.call(() => {
-        if (refLoad.current) refLoad.current.textContent = msg;
-      })
-        .fromTo(
-          refLoad.current,
-          { scale: 0.8, y: 40, opacity: 0 },
-          { scale: 1, y: 0, opacity: 1, duration: 0.8, ease: "back.out(1.7)" }
-        )
-        .to(refLoad.current, {
-          scale: 1.1,
-          opacity: 0,
-          duration: 0.8,
-          delay: 1,
-          ease: "power2.inOut",
-        });
+    // 🌀 Gentle rotation for realism
+    gsap.to(robotRef.current, {
+      rotate: 3,
+      duration: 2.5,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
     });
+
+    // 🌟 Pulsing glow behind the robot
+    gsap.to(glowRef.current, {
+      scale: 1.2,
+      opacity: 0.7,
+      duration: 1.8,
+      repeat: -1,
+      yoyo: true,
+      ease: "power1.inOut",
+    });
+
+    // ⏱ Optional fade-out (like your previous loader)
+    const timer = setTimeout(() => {
+      gsap.to(".loader-wrapper", {
+        opacity: 0,
+        duration: 0.8,
+        onComplete: onFinish,
+      });
+    }, 5000);
+
+    return () => clearTimeout(timer);
   }, [onFinish]);
 
-  useEffect(() => {
-    const circle = refCircle.current;
-    const box = refBox.current;
-
-    if (circle) {
-      gsap.to(circle, {
-        rotation: 360,
-        duration: 6,
-        repeat: -1,
-        ease: "linear",
-        transformOrigin: "center center",
-      });
-
-      gsap.to(circle, {
-        scale: 1.1,
-        duration: 1.5,
-        repeat: -1,
-        yoyo: true,
-        ease: "power1.inOut",
-      });
-    }
-
-    if (box) {
-      gsap.to(box, {
-        rotation: -360,
-        duration: 8,
-        repeat: -1,
-        ease: "linear",
-        transformOrigin: "center center",
-      });
-
-      gsap.to(box, {
-        scale: 1.2,
-        duration: 1.2,
-        repeat: -1,
-        yoyo: true,
-        ease: "power1.inOut",
-      });
-
-      gsap.to(box, {
-        boxShadow: "0 0 30px rgba(100, 100, 255, 0.6)",
-        repeat: -1,
-        duration: 2,
-        yoyo: true,
-      });
-    }
-  }, []);
-
   return (
-    <section className="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-indigo-100 via-white to-cyan-100 z-50 overflow-hidden">
-      <div className="relative flex items-center justify-center mb-10">
-        <div
-          ref={refCircle}
-          className="circle w-48 h-48 rounded-full border-[6px] absolute blur-sm"
-          style={{
-            borderImage:
-              "conic-gradient(#4f46e5, #06b6d4, #8b5cf6, #f43f5e, #4f46e5) 1",
-            borderStyle: "solid",
-            borderWidth: "6px",
-          }}
-        />
-        <div
-          ref={refBox}
-          className="box w-20 h-20 bg-gradient-to-tr from-indigo-500 to-cyan-400 rounded-xl shadow-lg absolute"
+    <section className="loader-wrapper fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white overflow-hidden z-50">
+      {/* Glowing aura */}
+      <div
+        ref={glowRef}
+        className="absolute w-72 h-72 rounded-full bg-gradient-to-tr from-indigo-600 via-purple-500 to-cyan-400 blur-3xl opacity-60"
+      ></div>
+
+      {/* Robot Image */}
+      <div ref={robotRef} className="relative w-40 h-40">
+        <Image
+          src={robotImg}
+          alt="Flying Robot Loader"
+          fill
+          className="object-contain drop-shadow-[0_0_25px_#8b5cf6]"
         />
       </div>
 
-      <h2
-        ref={refLoad}
-        className="text-center text-3xl font-semibold text-gray-700 tracking-wide"
-      ></h2>
+      {/* Text */}
+      <h2 className="mt-8 text-lg font-medium text-indigo-400 tracking-widest animate-pulse">
+        Loading...
+      </h2>
     </section>
   );
 }
-
-
-
