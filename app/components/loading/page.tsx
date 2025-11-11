@@ -79,7 +79,6 @@ export default function RobotLoading({ onFinish }: { onFinish?: () => void }) {
       yoyo: true,
       ease: "power1.inOut",
     });
-
     gsap.to(robotRef.current, {
       rotate: 3,
       duration: 2.5,

@@ -54,7 +54,6 @@ export default function Navbar() {
           }`}
         ></span>
       </button>
-
       {isOpen && (
         <div className="absolute top-16 left-0 w-full bg-transparent
          backdrop-blur-md shadow-lg flex flex-col items-center gap-6 py-6 md:hidden">

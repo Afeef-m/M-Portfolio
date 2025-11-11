@@ -47,7 +47,6 @@ function Stars() {
           sizeAttenuation
           depthWrite={false}
         />
-        
       </Points>
     </group>
   );
